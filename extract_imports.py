@@ -17,7 +17,7 @@ def extract_tlis(root):
 
 
 def main():
-    tl_imports, provided = extract_tlis('/tmp/scipy-0.14.0')
+    tl_imports, provided = extract_tlis('/tmp/Django-1.7.1')
     print tl_imports - provided
     
 
