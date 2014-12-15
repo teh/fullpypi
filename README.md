@@ -1,5 +1,7 @@
 # Building a full nix inventory of pypi (very WIP)
 
+**Current status: fetching pypi packages. **
+
 Packaging is traditionally a tricky business. Python has a long
 history of packaging solutions that I am going to skip. I'm only going
 to mention that the latest iteration is a [merge of setuptools and
