@@ -19,18 +19,12 @@ ec2-builder = { resources, pkgs, lib, ... }: let
 
   services.openssh.enable = true;
   nix.distributedBuilds = true;
-
+  
   # We know from the metadata dump that the totality of pypi is
   # 123GiB. We also need a reasonably large working area so we
   # allocate that as well.
-  fileSystems."/data" = {
-    autoFormat = true;
-    fsType = "ext4";
-    device = "/dev/xvdf";
-    ec2.size = 200;
-    ec2.volumeType = "gp2";
-  };
-    
+  deployment.ec2.ebsInitialRootDiskSize = 200;
+
   environment.systemPackages = [
     pkgs.git tompkgs.fullpypi
   ];
