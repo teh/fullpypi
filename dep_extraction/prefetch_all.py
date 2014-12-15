@@ -22,7 +22,7 @@ import pkg_resources
 
 CONCURRENCY = 3
 STATS = dict(i=0, total=0, errors=0)
-
+SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 # Small stats server so we can run in background:
 stats_app = flask.Flask(__name__)
@@ -30,6 +30,12 @@ stats_app = flask.Flask(__name__)
 def stats():
     return '{}'.format(STATS)
 eventlet.spawn(wsgi.server, eventlet.listen(('', 8005)), stats_app)
+
+
+def get_pkg_resources_path(x):
+    if os.path.exists(pkg_resources.resource_filename('dep_extraction', x)):
+        return pkg_resources.resource_filename('dep_extraction', x)
+    return os.path.join(SCRIPT_ROOT, x)
 
 
 def fetch_and_store_one((index, row)):
@@ -44,10 +50,10 @@ def fetch_and_store_one((index, row)):
             version=row['version'],
             url=row['url'],
         )
-        
+
         with open(os.path.join(row['store_root'], sha256), 'w') as f:
             f.write(meta.SerializeToString())
-        
+
     except subprocess.CalledProcessError as e:
         STATS['errors'] += 1
         print "error fetching", e, row
@@ -69,8 +75,7 @@ def main():
         'store_root', type=str, help='directory to store all the metadata.')
     args = parser.parse_args()
 
-    store = pandas.HDFStore(pkg_resources.resource_filename(
-        'dep_extraction', 'pypi-sdists-2014-12-14.h5'))
+    store = pandas.HDFStore(get_pkg_resources_path('pypi-sdists-2014-12-14.h5'))
     df = store['sdist_df']
     store.close()
 

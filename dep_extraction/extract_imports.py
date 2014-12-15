@@ -14,6 +14,11 @@ import pkg_resources
 
 SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+def get_pkg_resources_path(x):
+    if os.path.exists(pkg_resources.resource_filename('dep_extraction', x)):
+        return pkg_resources.resource_filename('dep_extraction', x)
+    return os.path.join(SCRIPT_ROOT, x)
+
 
 def discover_egg_dir(root):
     _, dirs, _ = os.walk(root).next()
@@ -36,7 +41,7 @@ def main():
     tl_imports, provides = extract_lib.extract_tlis(args.root)
 
     # Read database of known names.
-    with open(pkg_resources.resource_filename('dep_extraction', 'known_names.protobuf')) as f:
+    with open(get_pkg_resources_path('known_names.protobuf')) as f:
         known_names = dep_meta.KnownNames()
         known_names.ParseFromString(f.read())
         known_names = set(known_names.names)
