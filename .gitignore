@@ -1,2 +1,4 @@
 *pyc
 .envrc
+fullpypi.egg-info/
+build/

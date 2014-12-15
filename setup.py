@@ -14,4 +14,7 @@ if __name__ == '__main__':
         packages=find_packages(),
         include_package_data=True,
         zip_safe=False,
+        scripts=[
+            'dep_extraction/extract_imports.py'
+        ],
     )
