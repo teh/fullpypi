@@ -29,17 +29,20 @@ In some cases there is no solution (e.g. Package depends on "liba ==
 2.0.1" and package b depends on "liba == 2.2.0"), we're going to skip
 these for now.
 
-## Enter nix
+I'm going to move on despite having omitted a whole lot of problems
+such as optional dependencies or python3.
 
-nixos.org is a packaging system that defines each package with a
+## Enter Nix
+
+Nix is a packaging system that defines each package with a
 purely functional language. A side-effect (hah) of that is that
-*every* package depends on all its build inputs. The creators have a
+*every* package depends on *all* its build inputs. The creators have a
 [better, longer description here](http://nixos.org/nixos/about.html).
 
 I'm really interested in this because it allows me to build and test
-each package with all its dependencies in total isolation. Modulo bugs
-there is no chance that a random system package will sneak in and
-provide an import that I didn't expect to be there.
+each package with all its dependencies in total isolation. There is no
+chance that a random system package will sneak in and provide an
+import that I didn't expect to be there.
 
 Nix also comes with a large repository of existing packages that are
 not python, e.g. gcc, or libblas. A lot of python packages are
@@ -60,10 +63,13 @@ are parts, i.e. we can divide and conquer. Here's the plan.
 
 1. Get a copy of pypi's metadata (done, ~1d)
 2. Build a large nix-derivation with all packages (tdb).
-3. Fetch all packages and extract their metadata (tdb).
+3. Fetch all packages and extract their metadata (20%).
   1. Extract dependencies where provided (e.g. from `.egg/requires.txt`).
   2. Write a second, hand-curated datastore of dependencies that
-     maps (pypi-name, version) -> build-dependencies
+     maps (pypi-name, version) -> build-dependencies.
+  3. Write "smoke tests" that test some of the most basic imports etc.
+     These wouldn't replace full unit testing, but they are a good
+     indicator for whether the project has a chance to run.
 4. Build everything / update store accordingly.
 5. Extend nix to provide a sat-solver.
 
