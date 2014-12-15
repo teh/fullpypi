@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 """Script to prefetch all the pypi packages and then write their
-sha256 sums into a datastore.
+sha256 sums with some metadata into a datastore.
+
+Note that the download tool computes the flat hash but it still works
+if you do e.g. this:
+
+nix-prefetch-url \
+  https://pypi.python.org/packages/source/A/AWSpider/AWSpider-0.3.0.4.tar.gz \
+  000fbj6511w7dyc3h61x2krblygdx1r3dislgk2zvb7m75zx1dm4
 """
 import eventlet
 from eventlet import wsgi
@@ -28,8 +35,8 @@ eventlet.spawn(wsgi.server, eventlet.listen(('', 8005)), stats_app)
 def fetch_and_store_one((index, row)):
     try:
         sha256 = subprocess.check_output([
-            'nix-prefetch-url',
-            row['url']
+            '/bin/sh', '-c',
+            'source /etc/profile; nix-prefetch-url {}'.format(row['url']),
         ], stderr=open('/dev/null')).strip()
 
         meta = dep_meta.SDist(
@@ -62,14 +69,14 @@ def main():
         'store_root', type=str, help='directory to store all the metadata.')
     args = parser.parse_args()
 
-    
-    store = pandas.HDFStore(pkg_resources.resource_filename(__name__, 'pypi-sdists-2014-12-14.h5'))
+    store = pandas.HDFStore(pkg_resources.resource_filename(
+        'dep_extraction', 'pypi-sdists-2014-12-14.h5'))
     df = store['sdist_df']
     store.close()
 
     done = list(get_done(args.store_root))
     df = df.set_index('url')
-    df = df.ix[df.index.diff(done), :]
+    df = df.ix[df.index.difference(done), :]
 
     df['store_root'] = args.store_root
     gdf = df.reset_index().groupby(lambda x: x//1000)
