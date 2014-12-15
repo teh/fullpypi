@@ -2,3 +2,4 @@
 .envrc
 fullpypi.egg-info/
 build/
+dep_extraction/pypi-sdists-2014-12-14.h5
