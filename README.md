@@ -1,8 +1,8 @@
 # Building a full nix inventory of pypi (very WIP)
 
-Packaging is traditionally tricky business. Python has a long history
-of packaging solutions that I am going to skip. I'm only going to
-mention that the latest iteration is a [merge of setuptools and
+Packaging is traditionally a tricky business. Python has a long
+history of packaging solutions that I am going to skip. I'm only going
+to mention that the latest iteration is a [merge of setuptools and
 distutils](https://pythonhosted.org/setuptools/merge.html).
 
 This latest iteration still uses executable code to specify
@@ -52,7 +52,7 @@ There is a large number of packages that don't specify their imports
 correctly. There is no way of knowing how many without explicitly
 checking. Some low-N sampling makes me think at least half.
 
-## Ok, thanks for the summary but now what?
+## The plan
 
 This project plans to build a nix expression for all versions of all
 python packages. There are some easy and some hard parts, but there

@@ -1,0 +1,21 @@
+message DepMeta {
+  // Heuristic top-level package detection:
+  repeated string provides = 1;
+  repeated string depends_full = 2;
+  repeated string depends_remove_py2_stdlib = 3;
+  repeated string depends_remove_py3_stdlib = 4;
+
+  // Lines from the .egg/requires.txt directory:
+  repeated string requires_txt = 5;
+
+  // heuristic search ast-parses setup.py and looks for strings that
+  // match a known pypi package.
+  repeated string heuristic_setup_deps = 6;
+
+  repeated string log = 7;
+}
+
+
+message KnownNames {
+  repeated string names = 1;
+}
