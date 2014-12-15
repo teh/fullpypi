@@ -2,7 +2,9 @@ let
 region = "eu-west-1";
 zone = "eu-west-1a";
 
-ec2-builder = { resources, pkgs, lib, ... }: {
+ec2-builder = { resources, pkgs, lib, ... }: let
+  tompkgs = import <tompkgs> {};
+  in {
   deployment.targetEnv = "ec2";
   deployment.ec2.region = region;
   deployment.ec2.zone = zone;
@@ -25,16 +27,14 @@ ec2-builder = { resources, pkgs, lib, ... }: {
     autoFormat = true;
     fsType = "ext4";
     device = "/dev/xvdf";
-    ec2.disk = resources.ebsVolumes.data;
     ec2.size = 200;
     ec2.volumeType = "gp2";
   };
     
   environment.systemPackages = [
-    pkgs.git
+    pkgs.git tompkgs.fullpypi
   ];
 };
-
 
 in {
   network.description = "fullpypi";

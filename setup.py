@@ -17,4 +17,8 @@ if __name__ == '__main__':
         scripts=[
             'dep_extraction/extract_imports.py'
         ],
+        package_data={
+            'dep_extraction': ['known_names.protobuf',
+                               'pypi-sdists-2014-12-14.h5'],
+        },
     )
