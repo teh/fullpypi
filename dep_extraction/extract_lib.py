@@ -53,5 +53,3 @@ def python_files(root):
             if not x.endswith('.py'):
                 continue
             yield os.path.join(path, x)
-
-            

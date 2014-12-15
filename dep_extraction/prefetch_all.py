@@ -11,16 +11,16 @@ nix-prefetch-url \
 """
 import eventlet
 from eventlet import wsgi
+from eventlet.green import subprocess
 import os
 import argparse
 import pandas
-import subprocess
 from dep_extraction import dep_meta_pb2 as dep_meta
 import sys
 import flask
 import pkg_resources
 
-CONCURRENCY = 1
+CONCURRENCY = 3
 STATS = dict(i=0, total=0, errors=0)
 
 
