@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Script to prefetch all the pypi packages and then write their
 sha256 sums into a datastore.
 """
@@ -7,22 +8,22 @@ import os
 import argparse
 import pandas
 import subprocess
-import dep_meta_pb2 as dep_meta
+from dep_extraction import dep_meta_pb2 as dep_meta
 import sys
 import flask
+import pkg_resources
 
+CONCURRENCY = 1
 STATS = dict(i=0, total=0, errors=0)
 
 
+# Small stats server so we can run in background:
 stats_app = flask.Flask(__name__)
 @stats_app.route('/')
 def stats():
     return '{}'.format(STATS)
 eventlet.spawn(wsgi.server, eventlet.listen(('', 8005)), stats_app)
 
-
-SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
-CONCURRENCY = 1
 
 def fetch_and_store_one((index, row)):
     try:
@@ -61,7 +62,8 @@ def main():
         'store_root', type=str, help='directory to store all the metadata.')
     args = parser.parse_args()
 
-    store = pandas.HDFStore(os.path.join(SCRIPT_ROOT, 'pypi-sdists-2014-12-14.h5'))
+    
+    store = pandas.HDFStore(pkg_resources.resource_filename(__name__, 'pypi-sdists-2014-12-14.h5'))
     df = store['sdist_df']
     store.close()
 
@@ -82,6 +84,6 @@ def main():
                 sys.stdout.flush()
             i += 1
             STATS['i'] += 1
-            
+
 if __name__ == '__main__':
     main()

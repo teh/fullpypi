@@ -15,7 +15,8 @@ if __name__ == '__main__':
         include_package_data=True,
         zip_safe=False,
         scripts=[
-            'dep_extraction/extract_imports.py'
+            'dep_extraction/extract_imports.py',
+            'dep_extraction/prefetch_all.py',
         ],
         package_data={
             'dep_extraction': ['known_names.protobuf',
