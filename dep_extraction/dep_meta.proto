@@ -20,3 +20,7 @@ message SDist {
   optional string version = 2;
   optional string url = 3;
 }
+
+message KnownNames {
+  repeated string names = 1;
+}

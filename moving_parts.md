@@ -22,3 +22,13 @@ This is generating a nix-file per python package with a special
 builder: `extract_imports.py`. This build doesn't build a python
 package but a protobuf file with import/package metadata (see
 `dep_extraction/dep_meta.proto`).
+
+```sh
+write_extractor_builder.py /var/fullpypi/prefetch_result/ /var/fullpypi/extract.nix
+```
+
+This generates a humongous file that we can then build with nix-build:
+
+```sh
+nix-build ---no-out-link --keep-going -j 4 --attr all /var/fullpypi/extract_run.nix
+```

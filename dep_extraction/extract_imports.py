@@ -35,7 +35,7 @@ def main():
     parser.add_argument(
         'root', type=str, help='root of a python package.')
     parser.add_argument(
-        'out', type=str, help='where to write the metadata-protobuf.')
+        'out_path', type=str, help='File path for storing the metadata-protobuf.')
     args = parser.parse_args()
 
     tl_imports, provides = extract_lib.extract_tlis(args.root)
@@ -74,7 +74,7 @@ def main():
 
     meta.log.extend(log)
 
-    with open(args.out, 'w') as f:
+    with open(args.out_path, 'w') as f:
         f.write(meta.SerializeToString())
 
 

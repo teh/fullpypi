@@ -23,4 +23,7 @@ if __name__ == '__main__':
             'dep_extraction': ['known_names.protobuf',
                                'pypi-sdists-2014-12-14.h5'],
         },
+        data_files=[
+            ('nix', ['nix_writer/extract_imports_expression.nix']),
+        ]
     )

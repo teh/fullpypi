@@ -4,7 +4,8 @@ from dep_extraction import dep_meta_pb2 as dep_meta
 import argparse
 
 TEMPLATE = """\
-  "{name}" = {{
+  "{name}" = extractImports {{
+    name = "{name}";
     sha256 = "{sha256}";
     url = "{url}";
   }};
@@ -12,7 +13,7 @@ TEMPLATE = """\
 
 
 def process(prefetch_root, out_stream):
-    out_stream.write('{\n')
+    out_stream.write('{ extractImports }: {\n')
 
     for x in os.listdir(prefetch_root):
         meta = dep_meta.SDist()
