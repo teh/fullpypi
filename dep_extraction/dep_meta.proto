@@ -8,6 +8,9 @@ message DepMeta {
   // Lines from the .egg/requires.txt directory:
   repeated string requires_txt = 5;
 
+  // A raw requirements.txt file.
+  repeated string requirements_txt = 8;
+
   // heuristic search ast-parses setup.py and looks for strings that
   // match a known pypi package.
   repeated string heuristic_setup_deps = 6;

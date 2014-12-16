@@ -72,6 +72,13 @@ def main():
     except IOError as e:
         log.append('No .egg/requires.txt.'.format(e))
 
+    try:
+        requirements_txt = open(os.path.join(args.root, 'requirements.txt')).read()
+        meta.requirements_txt.extend(sorted(requirements_txt.splitlines()))
+
+    except IOError as e:
+        log.append('No requirements.txt.'.format(e))
+
     meta.log.extend(log)
 
     with open(args.out_path, 'w') as f:
