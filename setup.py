@@ -17,6 +17,7 @@ if __name__ == '__main__':
         scripts=[
             'dep_extraction/extract_imports.py',
             'dep_extraction/prefetch_all.py',
+            'dep_extraction/fullpypi_dump_meta.py',
             'nix_writer/write_extractor_builder.py',
         ],
         package_data={

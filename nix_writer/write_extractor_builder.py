@@ -19,7 +19,30 @@ def process(prefetch_root, out_stream):
         meta = dep_meta.SDist()
         meta.ParseFromString(open(os.path.join(prefetch_root, x)).read())
 
-        out_name = '{}-{}'.format(meta.pypi_name, meta.version)
+        # Note that we have to replace spaces with dashes because of
+        # restrictions in nix-derivation
+        # names. E.g. `django-swingtime-0.3 beta 0' doesn't work.
+
+        # More to sanitize:
+        # egrep "name =" /var/fullpypi/extract.nix | egrep "\"[-_0-9a-zA-Z\.]+\";$"  -v
+        #     name = "pyscons-1.0.42+";
+        #     name = "fabricate-(latest-release)";
+        #     name = "pyscons-1.0.30+";
+        #     name = "keysync-(latest-release)";
+        #     name = "pyscons-1.0.50+";
+        #     name = "croc-1.1.21+";
+        #     name = "croc-1.1.25+";
+        #     name = "i2p.i2cp-(latest-release)";
+        #     name = "pyscons-1.0.69+";
+        #     name = "ipkiss24ce-(latest-release)";
+        #     name = "pyscons-1.0.67+";
+        #     name = "openelectrons-i2c-(latest-release)";
+
+        out_name = '{}-{}'.format(meta.pypi_name, meta.version)\
+            .replace(' ', '-')\
+            .replace('(', '_')\
+            .replace(')', '_')\
+            .replace('+', '_plus')
         out_stream.write(TEMPLATE.format(sha256=x, name=out_name, url=meta.url))
 
     out_stream.write('}\n')

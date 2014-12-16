@@ -30,5 +30,5 @@ write_extractor_builder.py /var/fullpypi/prefetch_result/ /var/fullpypi/extract.
 This generates a humongous file that we can then build with nix-build:
 
 ```sh
-nix-build ---no-out-link --keep-going -j 4 --attr all /var/fullpypi/extract_run.nix
+GC_INITIAL_HEAP_SIZE=1073741824 nix-build ---no-out-link --keep-going -j 4 /var/fullpypi/extract_imports_expression.nix -A pkgs
 ```
