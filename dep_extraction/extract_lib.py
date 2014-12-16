@@ -29,9 +29,9 @@ def extract_tlis(root):
 
     # Also check the first-level subdirectory for packages (usually
     # ./src). Ignore more esoteric setups.
-    provided = set(get_tli(x) for x in setuptools.find_packages(root))
+    provided = set(tli for x in setuptools.find_packages(root) for tli in get_tli(x))
     srcdir = os.path.join(root, './src')
-    provided |= set(get_tli(x) for x in setuptools.find_packages(srcdir))
+    provided |= set(tli for x in setuptools.find_packages(srcdir) for tli in get_tli(x))
     return tl_imports, provided
 
 
