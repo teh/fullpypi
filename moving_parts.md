@@ -1,5 +1,8 @@
 # pypi-database
 
+*Word of warning: Some directories like /nix/store tend to get pretty
+ big (millions of entries). Avoid hitting that autocomplete-key in bash at all costs!*
+
 Scraped on 14th of December 2014 using [this
 script](https://github.com/WeAreWizards/pypidata).
 
@@ -34,5 +37,5 @@ them manually.
 
 ```sh
 nix-instantiate  /var/fullpypi/extract_imports_expression.nix -A pkgs > /var/fullpypi/extract_import_intantiations.txt
-cat /var/fullpypi/extract_import_intantiations.txt  | xargs nix-store -r -j 4 --keep-failed
+cat /var/fullpypi/extract_import_intantiations.txt  | xargs nix-store -r -j 8 --keep-going --option use-binary-caches false
 ```

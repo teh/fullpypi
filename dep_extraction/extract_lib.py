@@ -43,6 +43,11 @@ def extract_imports(path):
     except SyntaxError:
         yield SyntaxError, None
         return
+    except TypeError:
+        # Some python files contain 0-bytes:
+        # "TypeError: compile() expected string without null bytes"
+        yield TypeError, None
+        return
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom):
