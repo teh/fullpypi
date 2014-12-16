@@ -27,8 +27,12 @@ package but a protobuf file with import/package metadata (see
 write_extractor_builder.py /var/fullpypi/prefetch_result/ /var/fullpypi/extract.nix
 ```
 
-This generates a humongous file that we can then build with nix-build:
+This generates a humongous file which is of course too large to build
+with nix-build (command line passed to nix-store is too long). As as
+workaround we instantiate all the individual derivations and build
+them manually.
 
 ```sh
-GC_INITIAL_HEAP_SIZE=1073741824 nix-build ---no-out-link --keep-going -j 4 /var/fullpypi/extract_imports_expression.nix -A pkgs
+nix-instantiate  /var/fullpypi/extract_imports_expression.nix -A pkgs > /var/fullpypi/extract_import_intantiations.txt
+cat /var/fullpypi/extract_import_intantiations.txt  | xargs nix-store -r -j 4 --keep-failed
 ```
