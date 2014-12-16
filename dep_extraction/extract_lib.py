@@ -8,6 +8,8 @@ def get_tli(dotted_path):
     """Returns the top-level import from the full-import name."""
     if isinstance(dotted_path, type):
         return []
+    if dotted_path is None:
+        return []
     if isinstance(dotted_path, tuple):
         return [tli for x in dotted_path for tli in get_tli(x)]
     return [dotted_path.split('.', 2)[0]]
@@ -40,6 +42,7 @@ def extract_imports(path):
         tree = ast.parse(open(path).read())
     except SyntaxError:
         yield SyntaxError, None
+        return
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom):
